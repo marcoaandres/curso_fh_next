@@ -1,0 +1,34 @@
+* Los server components solo se construyen una vez, no se renderizan y no se vuelven a rerendirazar en el servidor
+
+* si estamos usando tailwind en la documentacion no hay muchos componentes, sin embarogo hay una pagina de la comunidad que tiene componentes ya "prefabricados": https://tailwindcomponents.com/ solo hay que cambiar las clases por className, las image por el componente Image de next, etc
+
+* Next tiene una forma de manejar las imagenes con lazyLoad y recortarlas para que no sean muy grandes o pesadas, esto lo hace con el componente <Image />, para esto tambien hay que agregar el protocolo y hostname en el archivo next.config.js
+
+* Si requerimos que una pieza de codigo sea interactiva como con un useState podemos aislar ese componente y usar el 'use client'
+
+
+* Podemos hacer debug de la aplicación agregando breakpoints en vsCode,
+    * terminar el proceso que corre la terminal "normal"
+    * dar click en Depurar el package.json en los script 
+    * elegir dev
+    * recargar la pagina
+Ya podras ir debugeando tus breakpoints
+
+* Tambien puedes hacer el shorcut 
+    * ctrl + shift + p para abrir la paleta de comandos
+    * escribir debug npm script
+    * seleccionar dev
+    * recarga la pagina 
+Ya podras ir debugeando tus breakpoints
+
+Hay diferentes formas de generar paginas en next:
+    * Static que significa que cuando se hace el deploy el server las genera pero solo las genera una vez ya que este contenido no cambia, es estatico, se va a volver a generar la pagina cuando se haga otro deploy
+    * Server-side (/pokemon/[id]) cuando el usuario entre a esta página el servidor entra en acción genera la página y la procesa, si conocemos cuantas paginas se crean (por ejemplo 100) se le puede decir a next que solo genere esa cantidad y guardarla en el filesystem del servidor y no estar forzandolo a generar cada pagina con cada usuario
+
+
+* Para poder usar redux tooltik (Estado global de la aplicación) con next es importante no seguir la documentación tradicional proveida por reduxx tooltik, debemos hacer ciertas configuraciones para trabajar con next v13+
+    * Se crea un archivo /store/Providers.tsx que será el archivo prooverdor del useState, es de tipo use client
+    * Se utiliza en el layout principal, esto para que tenga el contexto de toda la aplicación
+    * Esta solución no es del todo perfecta
+    * El principal inconveniente es que cuando querramos mandar la información generada en el servidor hacia el store(estado de la aplicación) de redux se debe hacer mediante una acción que carge el sta, (petcion http que llegue al back, cookies, etc)
+
