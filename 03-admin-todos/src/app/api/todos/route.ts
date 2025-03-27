@@ -1,7 +1,9 @@
 import prisma from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server'
 import { type NextRequest } from 'next/server'
 import * as yup from 'yup';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 //rag
 export async function GET(request: NextRequest) { 
@@ -34,9 +36,15 @@ export async function POST(request: Request) {
         // tomamos el body de la solicitud
         // const body = await request.json();
 
+        // sesion del usuario del lado del servidor
+            const session = await getServerSession(authOptions);
+
+            if(!session){
+                return NextResponse.json('No autorizado', {status: 401});
+            }
         // sacamos las propiedades que nos interesan, si llega algo más lo desechamos
         const {complete, description} = await postSchema.validate( await request.json() );
-        const todo = await prisma.todo.create({data: {description, complete}});
+        const todo = await prisma.todo.create({data: {description, complete, userId: session!.user!.id}});
 
         return NextResponse.json(todo);
 

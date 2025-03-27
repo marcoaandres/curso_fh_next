@@ -16,6 +16,10 @@ npx prisma generate
 ```
 7. Ejecutar el SEED para [crear la BBDD local](http://localhost:3000/api/seed)
 
+## Nota: Usuario por defecto
+__usuario:__  test@marcoandres.com
+__password:__ marco123
+
 # Prisma commands
 ```
 npx prisma init

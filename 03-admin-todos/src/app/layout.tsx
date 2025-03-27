@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "@/auth/components/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    // envolvemos toda nuestra aplicacion con el AuthProvider para tener la sesion del ususario del lado del cliente *Normalmente no se usa solo seria en casos muy especificos
+    <AuthProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </html>
+    </AuthProvider>
   );
 }

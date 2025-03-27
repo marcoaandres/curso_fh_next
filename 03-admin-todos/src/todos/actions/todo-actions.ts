@@ -1,11 +1,13 @@
 "use server";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 // aqui pondremos los server actions
 // se podria decir que son funciones comunes y corrientes
 // para que sean server actions podemos poner dentro de la funcion 'use server o si todas tus acciones serán del lado del servidor puede poner 'use server' en la primera linea del archivo (tambien el cliente lo puede llegar a llamar)
 
 import prisma from "@/lib/prisma";
 import { Todo } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 export const toggleTodo = async (
@@ -31,7 +33,11 @@ export const toggleTodo = async (
 
 export const addTodo = async (description: string) => {
   try {
-    const todo = await prisma.todo.create({ data: { description } });
+
+    // sesion del usuario del lado del servidor
+    const session = await getServerSession(authOptions);
+
+    const todo = await prisma.todo.create({ data: { description, userId: session!.user!.id } });
     revalidatePath("/dashboard/server-todos");
     return todo;
   } catch (error) {
