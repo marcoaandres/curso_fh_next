@@ -11,7 +11,7 @@ export const PageNotFound = () => {
             <p className="font-semibold text-xl">Whoops! Lo sentimos mucho.</p>
             <p className="font-light">
                 <span>
-                    Puedes regresar al 
+                    Puedes regresar al &nbsp;
                 </span>
                 <Link 
                 className="font-normal hover:underline transition-all"
