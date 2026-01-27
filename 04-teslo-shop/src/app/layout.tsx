@@ -4,7 +4,10 @@ import {inter } from "@/config/fonts";
 
 
 export const metadata: Metadata = {
-  title: "Teslo | shop",
+  title: {
+    template: "%s - Teslo | Shop",
+    default: "Home - Teslo | Shop",
+  },
   description: "A virtual store",
 };
 

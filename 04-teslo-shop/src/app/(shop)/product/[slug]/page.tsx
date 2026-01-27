@@ -1,21 +1,48 @@
+export const revalidate = 604800; // 7 days in seconds
+
+import { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
+import { titleFont } from "@/config/fonts";
+import { getProductBySlug } from "@/actions";
 import {
   ProductMobileSlideShow,
   ProductSlideShow,
   QuantitySelector,
   SizeSelector,
+  StockLabel,
 } from "@/components";
-import { titleFont } from "@/config/fonts";
-import { initialData } from "@/seed/seed";
-import { notFound } from "next/navigation";
 
 interface Props {
   params: {
     slug: string;
   };
 }
-export default function ProductPage({ params }: Props) {
-  const { slug } = params;
-  const product = initialData.products.find((product) => product.slug === slug);
+
+export async function generateMetadata(
+  { params }: Props,
+): Promise<Metadata> {
+  const slug = (await params).slug
+ 
+  // fetch post information
+  const product = await getProductBySlug(slug);
+ 
+  return {
+    title: product?.title,
+    description: product?.description,
+    openGraph: {
+      title: product?.title,
+      description: product?.description,
+      // image: [], url completa, por el momento usamos la url parcial
+      images: [`/products/${product?.images[1]}`],
+    }
+  }
+}
+
+export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
+  //const product = initialData.products.find((product) => product.slug === slug);
+  const product = await getProductBySlug(slug);
+
 
   if (!product) {
     notFound();
@@ -35,6 +62,8 @@ export default function ProductPage({ params }: Props) {
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
+        <StockLabel slug={product.slug} />
+
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
