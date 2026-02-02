@@ -16,7 +16,6 @@ export const Pagination = ({ totalPages }: Props) => {
   const searchParams = useSearchParams();
   const pageString = searchParams.get('page') ?? 1;
   const currentPage = isNaN(Number(pageString)) ? 1: Number(pageString);
-  console.log({currentPage})
 
   if(currentPage < 1 || currentPage > totalPages) redirect(pathname);
 
@@ -24,7 +23,6 @@ export const Pagination = ({ totalPages }: Props) => {
 
   const createPageUrl = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
-    console.log({pageNumber})
 
     if(pageNumber == '...'){
       return `${pathname}?${params.toString()}`;
